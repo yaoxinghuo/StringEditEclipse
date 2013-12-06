@@ -4,7 +4,7 @@ Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/commons-lang3-3.1.jar
-Bundle-Version: 1.0.1.201312061342
+Bundle-Version: 1.0.1.201312061402
 Bundle-Name: StringEdit
 Bundle-Activator: com.terrynow.eclipse.stringedit.Activator
 Bundle-ManifestVersion: 2

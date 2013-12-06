@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -27,11 +28,12 @@ import com.terrynow.eclipse.stringedit.Activator;
 import com.terrynow.eclipse.stringedit.TextChangeListener;
 
 public class StringPopup extends PopupDialog {
-	public Text textArea;
-	public TextChangeListener textListener = null;
+	private Text textArea;
+	private TextChangeListener textListener = null;
 	private String initText;
-	public Button unicodeBtn;
-	
+	private Button unicodeBtn;
+	private Link link;
+
 	private Point defaultLocation;
 
 	public StringPopup(Shell parent, String initText, Point defaultLocation) {
@@ -43,7 +45,7 @@ public class StringPopup extends PopupDialog {
 
 	@Override
 	protected Point getDefaultLocation(Point initialSize) {
-		if(defaultLocation==null)
+		if (defaultLocation == null)
 			return super.getDefaultLocation(initialSize);
 		return defaultLocation;
 	}
@@ -59,12 +61,33 @@ public class StringPopup extends PopupDialog {
 		textArea.setSelection(textArea.getText().length());
 	}
 
+	private void updateLinkStr(boolean showCopied) {
+		if (textArea == null || link == null)
+			return;
+		String text = textArea.getText();
+		if (StringUtils.isEmpty(text)) {
+			link.setText("(Empty String)");
+		} else {
+			StringBuffer sb = new StringBuffer("<a>");
+			sb.append("Copy ").append(text.length()).append(" Character");
+			if (text.length() > 1)
+				sb.append("s");
+			if (showCopied)
+				sb.append(" (Copied)");
+			sb.append("</a>");
+			link.setText(sb.toString());
+		}
+	}
+
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 
-		Link link = new Link(composite, SWT.NO);
-		link.setText("<a>Copy String</a>");
+		link = new Link(composite, SWT.NO);
+		GridData linkGridData = new GridData();
+		linkGridData.widthHint = 360;
+		link.setLayoutData(linkGridData);
+		link.setText("<a>Copy</a>");
 		this.setShellStyle(HOVER_SHELLSTYLE);
 		link.addMouseListener(new MouseListener() {
 
@@ -74,13 +97,14 @@ public class StringPopup extends PopupDialog {
 
 			@Override
 			public void mouseDown(MouseEvent e) {
-				if (textArea == null)
+				if (textArea == null || StringUtils.isEmpty(textArea.getText()))
 					return;
 				StringSelection stringSelection = new StringSelection(textArea
 						.getText());
 				Clipboard clipboard = Toolkit.getDefaultToolkit()
 						.getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
+				updateLinkStr(true);
 			}
 
 			@Override
@@ -88,7 +112,8 @@ public class StringPopup extends PopupDialog {
 			}
 		});
 
-		textArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+		textArea = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP
+				| SWT.V_SCROLL);
 		textArea.setText(initText);
 		textArea.setSelection(initText.length());
 		textArea.addModifyListener(new ModifyListener() {
@@ -98,7 +123,7 @@ public class StringPopup extends PopupDialog {
 				textChanged();
 			}
 		});
-		final GridData gridData = new GridData();
+		GridData gridData = new GridData();
 		gridData.widthHint = 400;
 		gridData.heightHint = 160;
 		textArea.setLayoutData(gridData);
@@ -129,6 +154,8 @@ public class StringPopup extends PopupDialog {
 			}
 		});
 
+		updateLinkStr(false);
+
 		return composite;
 	}
 
@@ -136,5 +163,6 @@ public class StringPopup extends PopupDialog {
 		if (textListener != null && textArea != null && unicodeBtn != null)
 			textListener.textChanged(textArea.getText(),
 					unicodeBtn.getSelection());
+		updateLinkStr(false);
 	}
 }
