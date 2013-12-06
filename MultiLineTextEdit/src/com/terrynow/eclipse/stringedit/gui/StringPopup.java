@@ -13,6 +13,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -30,11 +31,21 @@ public class StringPopup extends PopupDialog {
 	public TextChangeListener textListener = null;
 	private String initText;
 	public Button unicodeBtn;
+	
+	private Point defaultLocation;
 
-	public StringPopup(Shell parent, String initText) {
+	public StringPopup(Shell parent, String initText, Point defaultLocation) {
 		super(parent, PopupDialog.INFOPOPUP_SHELLSTYLE, true, false, false,
 				false, false, Activator.PLUG_NAME, null);
 		this.initText = initText;
+		this.defaultLocation = defaultLocation;
+	}
+
+	@Override
+	protected Point getDefaultLocation(Point initialSize) {
+		if(defaultLocation==null)
+			return super.getDefaultLocation(initialSize);
+		return defaultLocation;
 	}
 
 	@Override

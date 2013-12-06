@@ -3,17 +3,20 @@ package com.terrynow.eclipse.stringedit.handlers;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 import com.terrynow.eclipse.stringedit.Activator;
-import com.terrynow.eclipse.stringedit.TextChangeListener;
 import com.terrynow.eclipse.stringedit.StringUtils;
+import com.terrynow.eclipse.stringedit.TextChangeListener;
 import com.terrynow.eclipse.stringedit.gui.StringPopup;
 
 public class MultiLineHyperlink implements IHyperlink, TextChangeListener {
@@ -66,7 +69,7 @@ public class MultiLineHyperlink implements IHyperlink, TextChangeListener {
 
 		textUtils = new StringUtils();
 		textUtils.setDoc(doc.get());
-		textUtils.setCursorPosition(getCursorPosition());
+		textUtils.setCursorPosition(StringHandler.getCursorPosition());
 		boolean val = textUtils.proccess();
 		if (textUtils.getCursorPosition() < 0) {
 			return;
@@ -75,20 +78,22 @@ public class MultiLineHyperlink implements IHyperlink, TextChangeListener {
 			return;
 		}
 
+		StyledText styledText = (StyledText) editor.getAdapter(Control.class);
+		Point p = StringHandler.getPoint(styledText.getCaret());
+
+		Rectangle r = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getShell().getBounds();
+
+		Point pos = Display.getCurrent().getCursorLocation();
+		Point location = new Point(StringHandler.min(p.x, r.x + r.width - 500,
+				pos.x + 10), StringHandler.min(p.y, r.y + r.height - 160,
+				pos.y + 10));
+
 		final StringPopup textPopUp = new StringPopup(PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getShell(), textUtils.getText());
+				.getActiveWorkbenchWindow().getShell(), textUtils.getText(),
+				location);
 		textPopUp.open();
 		textPopUp.setTextListenerAndFocus(this);
-	}
-
-	private int getCursorPosition() {
-		ISelection selection = PlatformUI.getWorkbench()
-				.getActiveWorkbenchWindow().getSelectionService()
-				.getSelection();
-		if ((selection instanceof ITextSelection)) {
-			return ((ITextSelection) selection).getOffset();
-		}
-		return -1;
 	}
 
 	@Override
