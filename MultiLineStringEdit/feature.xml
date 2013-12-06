@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.terrynow.eclipse.stringedit"
+      label="MultiLineStringEdit"
+      version="1.0.0.qualifier"
+      provider-name="TerryTech">
+
+   <description url="http://www.terrynow.com">
+      Popup String Edit.
+   </description>
+
+   <copyright url="http://www.terrynow.com">
+      --
+   </copyright>
+
+   <license url="http://www.terrynow.com">
+      --
+   </license>
+
+   <plugin
+         id="com.terrynow.eclipse.stringedit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

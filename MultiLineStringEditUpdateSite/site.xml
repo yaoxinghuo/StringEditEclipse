@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.terrynow.eclipse.stringedit_1.0.0.201312061143.jar" id="com.terrynow.eclipse.stringedit" version="1.0.0.201312061143">
+      <category name="StringEdit"/>
+   </feature>
+   <category-def name="StringEdit" label="StringEdit"/>
+</site>
