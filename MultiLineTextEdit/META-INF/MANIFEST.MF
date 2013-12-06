@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Require-Bundle: org.eclipse.ui,org.eclipse.core.runtime,org.eclipse.ui
+ .workbench.texteditor,org.eclipse.jface.text
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .,
+ lib/commons-lang3-3.1.jar
+Bundle-Version: 1.0.1.201312061122
+Bundle-Name: StringEdit
+Bundle-Activator: com.terrynow.eclipse.stringedit.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.terrynow.eclipse.stringedit;singleton:=true
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
+ JavaSE-1.7
+
+
