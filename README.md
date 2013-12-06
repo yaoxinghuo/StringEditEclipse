@@ -1,4 +1,4 @@
-StringEditEclipse
+String Edit plugin for Eclipse
 =================
 
 Multi Line Popup String Edit plugin for eclipse
