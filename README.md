@@ -9,9 +9,9 @@ When edit java source file in eclipse, meet string variable, ctrl+click(mac is c
 Can also copy the original string to clicpboard.
 Have the option whether to escape the Chinese to unicode.
 
-Offline zip package can be downloaded from here: http://sdrv.ms/18cJhAA or http://pan.baidu.com/s/1vMJxD
+Offline install zip package can be downloaded from here: http://sdrv.ms/18cJhAA or http://pan.baidu.com/s/1vMJxD
 
-Xcode 下有个文本插件https://github.com/holtwick/HOStringSense-for-Xcode 对于要输入和编辑长文本的开发者非常好用，直接弹出一个 Popup 框，在里面就可以方便的编辑文本了，受到他的启发，同时也参考了https://github.com/kbss/StringUtils_plugin这个项目，自己开发了一个 Eclipse 下的类似功能的插件，按照国际惯例，开源之: https://github.com/yaoxinghuo/StringEditEclipse
+Xcode 下有个文本插件https://github.com/holtwick/HOStringSense-for-Xcode 对于要输入和编辑长文本的开发者非常好用，直接弹出一个 Popup 框，在里面就可以方便的编辑文本了，受到他的启发，同时也参考了https://github.com/kbss/StringUtils_plugin 这个项目，自己开发了一个 Eclipse 下的类似功能的插件，按照国际惯例，开源之: https://github.com/yaoxinghuo/StringEditEclipse
 
 主要功能如图
 1)在 java 代码的变量文本上，按住 Ctrl+鼠标单击，或者按快捷键（Ctrl+Alt+M），或者点右键，在右键菜单找到String Edit，程序会自动找出有文本的地方，进而判断是否弹出编辑器；
