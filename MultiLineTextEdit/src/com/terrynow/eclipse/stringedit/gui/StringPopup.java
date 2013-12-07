@@ -14,6 +14,7 @@ import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -114,6 +115,8 @@ public class StringPopup extends PopupDialog {
 
 		textArea = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP
 				| SWT.V_SCROLL);
+		textArea.setFont(new Font(getShell().getDisplay(), "Courier New",
+                14, SWT.NORMAL));
 		textArea.setText(initText);
 		textArea.setSelection(initText.length());
 		textArea.addModifyListener(new ModifyListener() {
