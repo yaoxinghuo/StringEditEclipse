@@ -17,10 +17,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -39,7 +41,7 @@ public class StringPopup extends PopupDialog {
 
 	public StringPopup(Shell parent, String initText, Point defaultLocation) {
 		super(parent, PopupDialog.INFOPOPUP_SHELLSTYLE, true, false, false,
-				false, false, Activator.PLUG_NAME, null);
+				false, false, Activator.PLUG_NAME + " Window", null);
 		this.initText = initText;
 		this.defaultLocation = defaultLocation;
 	}
@@ -84,9 +86,43 @@ public class StringPopup extends PopupDialog {
 	protected Control createDialogArea(Composite parent) {
 		Composite composite = (Composite) super.createDialogArea(parent);
 
-		link = new Link(composite, SWT.NO);
+		textArea = new Text(composite, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
+		textArea.setFont(new Font(getShell().getDisplay(), "Courier New", 14,
+				SWT.NORMAL));
+		textArea.setText(initText);
+		textArea.setSelection(initText.length());
+		textArea.addModifyListener(new ModifyListener() {
+
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				textChanged();
+			}
+		});
+		GridData textAreaGridData = new GridData();
+		textAreaGridData.widthHint = 400;
+		textAreaGridData.heightHint = 160;
+		textArea.setLayoutData(textAreaGridData);
+
+		Label divider = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridData dividerGridData = new GridData();
+		dividerGridData.horizontalAlignment = GridData.FILL;
+		dividerGridData.grabExcessHorizontalSpace = true;
+		divider.setLayoutData(dividerGridData);
+
+		GridLayout controlContainerLayout = new GridLayout();
+		controlContainerLayout.numColumns = 2;
+		Composite controlContainer = new Composite(composite, SWT.NO);
+		controlContainer.setLayout(controlContainerLayout);
+		controlContainer.setLayoutData(new GridData());
+
+		GridData controlContailerGridData = new GridData();
+		controlContailerGridData.horizontalAlignment = GridData.FILL;
+		controlContailerGridData.grabExcessHorizontalSpace = true;
+		controlContainer.setLayoutData(controlContailerGridData);
+
+		link = new Link(controlContainer, SWT.NO);
 		GridData linkGridData = new GridData();
-		linkGridData.widthHint = 360;
+		linkGridData.widthHint = 200;
 		link.setLayoutData(linkGridData);
 		link.setText("<a>Copy</a>");
 		this.setShellStyle(HOVER_SHELLSTYLE);
@@ -113,28 +149,13 @@ public class StringPopup extends PopupDialog {
 			}
 		});
 
-		textArea = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP
-				| SWT.V_SCROLL);
-		textArea.setFont(new Font(getShell().getDisplay(), "Courier New",
-                14, SWT.NORMAL));
-		textArea.setText(initText);
-		textArea.setSelection(initText.length());
-		textArea.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent arg0) {
-				textChanged();
-			}
-		});
-		GridData gridData = new GridData();
-		gridData.widthHint = 400;
-		gridData.heightHint = 160;
-		textArea.setLayoutData(gridData);
-
 		// final IEclipsePreferences prefs = InstanceScope.INSTANCE
 		// .getNode(Activator.PLUGIN_ID);
 		// boolean unicodeStr = prefs.getBoolean("unicode_str", false);
-		unicodeBtn = new Button(composite, SWT.CHECK);
+		unicodeBtn = new Button(controlContainer, SWT.CHECK);
+		// unicodeBtn.setLayoutData(unicodeBtnGridData);
+		unicodeBtn.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END
+				| GridData.GRAB_HORIZONTAL));
 		// unicodeBtn.setSelection(unicodeStr);
 		unicodeBtn.setText("Unicode String Format");
 		unicodeBtn.addSelectionListener(new SelectionListener() {

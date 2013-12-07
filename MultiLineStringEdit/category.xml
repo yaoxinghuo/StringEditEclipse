@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.terrynow.eclipse.stringedit_1.0.0.qualifier.jar" id="com.terrynow.eclipse.stringedit" version="1.0.0.qualifier"/>
+   <feature url="features/com.terrynow.eclipse.stringedit_1.0.1.qualifier.jar" id="com.terrynow.eclipse.stringedit" version="1.0.1.qualifier">
+      <category name="com.terrynow.eclipse.stringedit"/>
+   </feature>
    <category-def name="com.terrynow.eclipse.stringedit" label="StringEdit"/>
 </site>
