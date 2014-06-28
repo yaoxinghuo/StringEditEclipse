@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -35,7 +34,7 @@ public class StringPopup extends PopupDialog {
 	private TextChangeListener textListener = null;
 	private String initText;
 	private Button unicodeBtn;
-	private Link link;
+	private Label link;
 
 	private Point defaultLocation;
 
@@ -71,13 +70,12 @@ public class StringPopup extends PopupDialog {
 		if (StringUtils.isEmpty(text)) {
 			link.setText("(Empty String)");
 		} else {
-			StringBuffer sb = new StringBuffer("<a>");
+			StringBuffer sb = new StringBuffer();
 			sb.append("Copy ").append(text.length()).append(" Character");
 			if (text.length() > 1)
 				sb.append("s");
 			if (showCopied)
 				sb.append(" (Copied)");
-			sb.append("</a>");
 			link.setText(sb.toString());
 		}
 	}
@@ -120,20 +118,17 @@ public class StringPopup extends PopupDialog {
 		controlContailerGridData.grabExcessHorizontalSpace = true;
 		controlContainer.setLayoutData(controlContailerGridData);
 
-		link = new Link(controlContainer, SWT.NO);
+		link = new Label(controlContainer, SWT.NONE);
+		link.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND));
 		GridData linkGridData = new GridData();
 		linkGridData.widthHint = 200;
 		link.setLayoutData(linkGridData);
-		link.setText("<a>Copy</a>");
+		link.setText("Copy");
 		this.setShellStyle(HOVER_SHELLSTYLE);
 		link.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseDown(MouseEvent e) {
 				if (textArea == null || StringUtils.isEmpty(textArea.getText()))
 					return;
 				StringSelection stringSelection = new StringSelection(textArea
@@ -142,6 +137,10 @@ public class StringPopup extends PopupDialog {
 						.getSystemClipboard();
 				clipboard.setContents(stringSelection, null);
 				updateLinkStr(true);
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
 			}
 
 			@Override
