@@ -34,6 +34,7 @@ public class StringPopup extends PopupDialog {
 	private TextChangeListener textListener = null;
 	private String initText;
 	private Button unicodeBtn;
+	private Button newLineAsRNBtn;
 	private Label link;
 
 	private Point defaultLocation;
@@ -79,6 +80,21 @@ public class StringPopup extends PopupDialog {
 			link.setText(sb.toString());
 		}
 	}
+	
+	private void doCopy(){
+		if (textArea == null || StringUtils.isEmpty(textArea.getText()))
+			return;
+		String text = textArea.getText();
+		if (newLineAsRNBtn.getSelection()) {
+			text = text.replace("\n", "\\n").replace("\r", "\\r")
+					.replace("\r\n", "\\r\\n");
+		}
+		StringSelection stringSelection = new StringSelection(text);
+		Clipboard clipboard = Toolkit.getDefaultToolkit()
+				.getSystemClipboard();
+		clipboard.setContents(stringSelection, null);
+		updateLinkStr(true);
+	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -108,7 +124,7 @@ public class StringPopup extends PopupDialog {
 		divider.setLayoutData(dividerGridData);
 
 		GridLayout controlContainerLayout = new GridLayout();
-		controlContainerLayout.numColumns = 2;
+		controlContainerLayout.numColumns = 3;
 		Composite controlContainer = new Composite(composite, SWT.NO);
 		controlContainer.setLayout(controlContainerLayout);
 		controlContainer.setLayoutData(new GridData());
@@ -129,14 +145,7 @@ public class StringPopup extends PopupDialog {
 
 			@Override
 			public void mouseUp(MouseEvent e) {
-				if (textArea == null || StringUtils.isEmpty(textArea.getText()))
-					return;
-				StringSelection stringSelection = new StringSelection(textArea
-						.getText());
-				Clipboard clipboard = Toolkit.getDefaultToolkit()
-						.getSystemClipboard();
-				clipboard.setContents(stringSelection, null);
-				updateLinkStr(true);
+				doCopy();
 			}
 
 			@Override
@@ -148,6 +157,23 @@ public class StringPopup extends PopupDialog {
 			}
 		});
 
+		newLineAsRNBtn = new Button(controlContainer, SWT.CHECK);
+		newLineAsRNBtn.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END
+				| GridData.GRAB_HORIZONTAL));
+		newLineAsRNBtn.setText("Wrap as \\r\\n when copy");
+		newLineAsRNBtn.setSelection(true);
+		newLineAsRNBtn.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				doCopy();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+		});
+
 		// final IEclipsePreferences prefs = InstanceScope.INSTANCE
 		// .getNode(Activator.PLUGIN_ID);
 		// boolean unicodeStr = prefs.getBoolean("unicode_str", false);
@@ -156,7 +182,7 @@ public class StringPopup extends PopupDialog {
 		unicodeBtn.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END
 				| GridData.GRAB_HORIZONTAL));
 		// unicodeBtn.setSelection(unicodeStr);
-		unicodeBtn.setText("Unicode String Format");
+		unicodeBtn.setText("Unicode Format");
 		unicodeBtn.addSelectionListener(new SelectionListener() {
 
 			@Override
